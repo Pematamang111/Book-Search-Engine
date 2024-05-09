@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(_dirname, '../client/dist/index.html'));
   })
 }
-}
+
 
 app.use(routes);
 
@@ -43,6 +43,7 @@ db.once('open', () => {
     console.log(`🌍 Now listening on localhost:${PORT}/graphql`);
   });
 });
+}
 
 //call the async function to start the function
 startApolloServer();
