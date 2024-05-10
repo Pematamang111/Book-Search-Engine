@@ -19,13 +19,17 @@ import SignupForm from '../components/SignupForm';
 
 import { QUERY_USER,  QUERY_BOOK  } from '../utils/queries';
 
+import { REMOVE_BOOK } from '../utils/mutations';
+
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
+
+  const [removeBook, {data}] = useMutation(REMOVE_BOOK);
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
 
-  const { loading, data } = useQuery(QUERY_USER);
+  const { loading, data } = useQuery(REMOVE_BOOK);
     // Important for useQuery: We use the optional chaining operator to get the resulting profile from our query, or fallback to an empty array if the query isn't resolved yet
   const user = data?.user || [];
   // useQuery(() => {
