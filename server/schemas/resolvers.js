@@ -1,4 +1,5 @@
 const { Book, User } = require('../models');
+const { signToken } = require('../utils/auth')
 
 const resolvers = {
     Query: {
@@ -19,8 +20,8 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parent, { email, password }) => {
-          const user = await User.create({ email, password });
+        addUser: async (parent, { username, email, password }) => {
+          const user = await User.create({ username, email, password });
           const token = signToken(user);
     
           return { token, user };
@@ -43,7 +44,7 @@ const resolvers = {
         },
     
         // Add a third argument to the resolver to access data in our `context`
-        addBook: async (parent, { userId, skill }, context) => {
+        addBook: async (parent, { bookId, book }, context) => {
           // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
           if (context.user) {
             return User.findOneAndUpdate(
@@ -61,18 +62,18 @@ const resolvers = {
           throw AuthenticationError;
         },
         // Set up mutation so a logged in user can only remove their profile and no one else's
-        removeUser: async (parent, args, context) => {
-          if (context.user) {
-            return User.findOneAndDelete({ _id: context.user._id });
-          }
-          throw AuthenticationError;
-        },
+        // removeUser: async (parent, args, context) => {
+        //   if (context.user) {
+        //     return User.findOneAndDelete({ _id: context.user._id });
+        //   }
+        //   throw AuthenticationError;
+        // },
         // Make it so a logged in user can only remove a skill from their own profile
-        removeBook: async (parent, { book }, context) => {
+        removeBook: async (parent, { bookId }, context) => {
           if (context.user) {
-            return Book.findOneAndUpdate(
+            return User.findOneAndUpdate(
               { _id: context.user._id },
-              { $pull: { books: book } },
+              { $pull: { savedBooks: bookId } },
               { new: true }
             );
           }

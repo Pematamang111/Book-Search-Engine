@@ -5,6 +5,8 @@ const path = require('path');
 const { authMiddleware } = require('./utils/auth');//import authentication
 const db = require('./config/connection');
 const routes = require('./routes');
+const typeDefs = require('./schemas/typeDefs');
+const resolvers = require('./schemas/resolvers');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
