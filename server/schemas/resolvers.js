@@ -1,5 +1,5 @@
 const { Book, User } = require('../models');
-const { signToken } = require('../utils/auth')
+const { signToken, AuthenticationError } = require('../utils/auth')
 
 const resolvers = {
     Query: {
@@ -27,20 +27,26 @@ const resolvers = {
           return { token, user };
         },
         login: async (parent, { email, password }) => {
-          const user = await User.findOne({ email });
-    
-          if (!user) {
-            throw AuthenticationError;
+          try {
+            console.log("email", email)
+            console.log("email", email)
+            const user = await User.findOne({ email });
+            
+            if (!user) {
+              throw AuthenticationError;
+            }
+      
+            const correctPw = await user.isCorrectPassword(password);
+      
+            if (!correctPw) {
+              throw AuthenticationError;
+            }
+      
+            const token = signToken(user);
+            return { token, user };
+          } catch(err) {
+            console.log(err)
           }
-    
-          const correctPw = await user.isCorrectPassword(password);
-    
-          if (!correctPw) {
-            throw AuthenticationError;
-          }
-    
-          const token = signToken(user);
-          return { token, user };
         },
     
         // Add a third argument to the resolver to access data in our `context`
