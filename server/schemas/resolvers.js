@@ -57,7 +57,7 @@ const resolvers = {
             return User.findOneAndUpdate(
               { _id: profileId },
               {
-                $addToSet: { books: title },
+                $addToSet: { savedbook: {title} },
               },
               {
                 new: true,
@@ -76,6 +76,21 @@ const resolvers = {
         //   throw AuthenticationError;
         // },
         // Make it so a logged in user can only remove a skill from their own profile
+
+        saveBook: async (parent, { bookData }, context) => {
+          if (context.user) {
+            const updatedUser = await User.findByIdAndUpdate(
+              { _id: context.user._id },
+              { $push: { savedBooks: bookData } },
+              { new: true }
+            );
+    
+            return updatedUser;
+          }
+    
+          throw AuthenticationError;
+        },
+
         removeBook: async (parent, { bookId }, context) => {
           if (context.user) {
             return User.findOneAndUpdate(
