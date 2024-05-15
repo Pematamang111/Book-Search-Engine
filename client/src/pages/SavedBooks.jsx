@@ -34,7 +34,7 @@ const SavedBooks = () => {
   // Important for useQuery: We use the optional chaining operator to get the resulting profile from our query, or fallback to an empty array if the query isn't resolved yet
   const userData = data?.me || {};
   console.log("User: ", userData);
-//  const userDataLength = Object.keys(userData).length;
+ const userDataLength = Object.keys(userData).length;
   // useQuery(() => {
   //   const getUserData = async () => {
   //     try {
@@ -60,7 +60,7 @@ const SavedBooks = () => {
   //   getUserData();
   // }, [userDataLength]);
 
-  // // create function that accepts the book's mongo _id value as param and deletes the book from the database
+  // create function that accepts the book's mongo _id value as param and deletes the book from the database
   // const handleDeleteBook = async (bookId) => {
   //   const token = Auth.loggedIn() ? Auth.getToken() : null;
 
