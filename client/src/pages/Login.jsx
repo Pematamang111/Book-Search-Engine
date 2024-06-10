@@ -11,11 +11,11 @@ const Login = () => {
 
   // update state based on form input changes
   const handleChange = (event) => {
-    const { value } = event.target;
+    const { name, value } = event.target;
 
     setFormState({
       ...formState,
-      value,
+      [name]: value,
     });
   };
 
